@@ -4,8 +4,8 @@ function findAll() {
     return db('classes');
 }
 
-function findById(id) {
-    return db('classes').where({id}).first();
+function findById(class_id) {
+    return db('classes').where({class_id}).first();
 }
 
 function insert(body) {

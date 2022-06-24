@@ -5,31 +5,40 @@ test("sanity 1+1", () => {
   expect(1 + 1).toEqual(2);
 });
 
-test("Check environment var", () => {
-  console.log(process.env.NODE_ENV);
-  expect(process.env.NODE_ENV).toBe("testing");
-});
-
 beforeAll(async () => {
-  await db.migrate.rollback();
-  await db.migrate.latest();
+    await db.migrate.rollback();
+    await db.migrate.latest();
 });
 
 beforeEach(async () => {
-  await db("resources").truncate();
-  await db("classes").truncate();
-  await db.seed.run();
+    await db("resources").truncate();
+    await db("classes").truncate();
+    await db.seed.run();
 });
 
 afterAll(async () => {
-  await db.destroy();
+    await db.destroy();
+});
+
+test("Check environment var", () => {
+  expect(process.env.NODE_ENV).toBe("testing");
 });
 
 describe('DB model tests', () => {
 
-    test('findAll', async () => {
+    test('findAll()', async () => {
         const result = await classes.findAll();
         expect(result).toHaveLength(2);
         expect(result[1]).toHaveProperty('name', 'shaman');
+    })
+
+    test('findById()', async () => {
+        let result = await classes.findById(1);
+        expect(result).toBeDefined();
+        expect(result.class_id).toBe(1);
+        expect(result.name).toBe('warrior');
+
+        result = await classes.findById(20);
+        expect(result).not.toBeDefined();
     })
 })
