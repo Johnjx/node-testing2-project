@@ -66,11 +66,21 @@ describe("HTTP tests", () => {
     expect(res.body).toEqual({ api: "up" });
   });
 
-  test('GET /api/classes', async () => {
+  test('GET /classes', async () => {
     let res = await request(server).get('/classes');
     expect(res.statusCode).toBe(200);
     expect(res.body).toBeInstanceOf(Array);
     expect(res.body).toHaveLength(2);
-});
+  });
+
+  test('GET /classes/:id', async () => {
+    let res = await request(server).get('/classes/2');
+    expect(res).toBeDefined();
+    expect(res.body.class_id).toBe(2);
+    expect(res.body.name).toBe('shaman');
+
+    res = await request(server).get('/classes/20');
+    expect(res.statusCode).toBe(404);
+  });
   
 });

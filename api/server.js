@@ -18,8 +18,17 @@ server.post('/classes', (req, res) => {
   res.send('Hello from wow-classes post route');
 });
 
-server.get('/classes/:id', (req, res) => {
-  res.send('Hello from wow-classes get by ID route');
+server.get('/classes/:id', async (req, res, next) => {
+  try {
+    const result = await classes.findById(req.params.id);
+    if(result == null) {
+      res.status(404).json({ message: 'class not found' });
+      return;
+    }
+    res.json(result);
+  } catch(err) {
+    next(err)
+  }
 });
 
 server.use("*", (req, res) => {
