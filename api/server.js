@@ -1,7 +1,9 @@
 const express = require("express");
 const server = express();
+const classesRoute = require('./wow-classes/router');
 
 server.use(express.json());
+server.use('/api/classes', classesRoute);
 
 server.use("*", (req, res) => {
   res.status(404).json({ message: "404 Not found" });
