@@ -1,9 +1,6 @@
 const db = require("../data/db-config");
 const classes = require('./wow-classes/model');
 
-test("sanity 1+1", () => {
-  expect(1 + 1).toEqual(2);
-});
 
 beforeAll(async () => {
     await db.migrate.rollback();
@@ -20,8 +17,12 @@ afterAll(async () => {
     await db.destroy();
 });
 
+test("sanity 1+1", () => {
+  expect(1 + 1).toEqual(2);
+});
+
 test("Check environment var", () => {
-  expect(process.env.NODE_ENV).toBe("testing");
+    expect(process.env.NODE_ENV).toBe("testing");
 });
 
 describe('DB model tests', () => {
@@ -41,4 +42,16 @@ describe('DB model tests', () => {
         result = await classes.findById(20);
         expect(result).not.toBeDefined();
     })
+
+    test('insert()', async () => {
+        let result = await classes.insert({ name: 'mage' });
+        expect(result).toBeDefined();
+        expect(result.class_id).toBe(3);
+        expect(result.name).toBe('mage');
+
+        result = await classes.findAll();
+        expect(result).toHaveLength(3);
+        expect(result[2]).toMatchObject({ name: 'mage' });
+    });
+
 })
