@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const classes = require('./model');
 
 router.get('/', (req, res) => {
     res.send('Hello from wow-classes route');
