@@ -82,5 +82,15 @@ describe("HTTP tests", () => {
     res = await request(server).get('/classes/20');
     expect(res.statusCode).toBe(404);
   });
+
+  test('POST /hobbits', async () => {
+    let res = await request(server).post('/classes').send({ name: 'hunter' });
+    expect(res.body.class_id).toBe(3);
+    expect(res.body.name).toBe('hunter');
+
+    let result = await classes.findAll();
+    expect(result).toHaveLength(3);
+    expect(result[2]).toMatchObject({ name: 'hunter' });
+  });
   
 });

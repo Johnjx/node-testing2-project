@@ -14,8 +14,10 @@ server.get('/classes', (req, res, next) => {
   .catch(next)
 });
 
-server.post('/classes', (req, res) => {
-  res.send('Hello from wow-classes post route');
+server.post('/classes', (req, res, next) => {
+  classes.insert(req.body)
+  .then(newClass => res.status(201).json(newClass))
+  .catch(next)
 });
 
 server.get('/classes/:id', async (req, res, next) => {
